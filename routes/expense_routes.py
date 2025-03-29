@@ -226,3 +226,13 @@ def delete_transaction(id):
     db.session.commit()
 
     return jsonify({"message": "Transaction deleted successfully"}), 200
+
+
+
+# Delete Transaction
+@expense_routes.route('/test', methods=['GET'])
+
+def test():
+
+
+    return jsonify({"message": "Transaction deleted successfully"}), 200
