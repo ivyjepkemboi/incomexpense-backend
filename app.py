@@ -6,10 +6,27 @@ from config import Config
 from db import db
 from routes.auth_routes import auth_routes
 from routes.expense_routes import expense_routes
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 
-app.config.from_object(Config)
+
+# Google Cloud SQL (change this accordingly)
+PASSWORD ="achawee.123!*"
+PUBLIC_IP_ADDRESS ="34.57.129.23"
+DBNAME ="expenses"
+PROJECT_ID ="landser"
+INSTANCE_NAME ="expenses"
+ 
+# configuration
+app.config["SECRET_KEY"] = "yoursecretkey"
+app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql + mysqldb://exp_admin:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
+ 
+db = SQLAlchemy(app)
+
+# app.config.from_object(Config)
 
 db.init_app(app)
 jwt = JWTManager(app)
