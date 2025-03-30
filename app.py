@@ -25,6 +25,55 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize the database object
 db = SQLAlchemy(app)
 
+# Initialize the database object
+db = SQLAlchemy(app)
+
+# Define a simple User model for the table
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+# Route to create the table and populate it with data
+@app.route('/create_table')
+def create_table():
+    try:
+        # Create the table in the database
+        db.create_all()
+
+        # Populate the table with some data if it's empty
+        if User.query.count() == 0:
+            user1 = User(username='alice', email='alice@example.com')
+            user2 = User(username='bob', email='bob@example.com')
+            db.session.add(user1)
+            db.session.add(user2)
+            db.session.commit()
+
+        return jsonify({"message": "Table created and data inserted"}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+# Route to select and show all users
+@app.route('/show_users')
+def show_users():
+    try:
+        # Query all users from the User table
+        users = User.query.all()
+
+        # Format the result as a list of dictionaries
+        users_list = [{"id": user.id, "username": user.username, "email": user.email} for user in users]
+
+        return jsonify({"users": users_list}), 200
+    except Exception as e:
+        return jsonify({"error": "An error occurred while fetching data", "details": str(e)}), 500
+
+# Route to test connection to the database
+
+
+
 @app.route('/')
 
 def test_connection():
