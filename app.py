@@ -1,3 +1,4 @@
+import click
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
@@ -58,6 +59,18 @@ def test_connection():
     except Exception as e:
         # Handle any other unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+    
+def migrate_on_start():
+    """Automatically run migrations on app load"""
+    try:
+        print("Running migrations...")
+        # Automatically apply migrations
+        click.echo("Running migrations...")
+        from flask_migrate import upgrade
+        upgrade()
+        print("Migrations applied successfully!")
+    except Exception as e:
+        print(f"Error applying migrations: {e}")
 
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host="0.0.0.0")
