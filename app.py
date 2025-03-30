@@ -26,11 +26,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 @app.route('/')
+
 def test_connection():
     try:
         # Attempt to execute a simple query to check the connection
-        result = db.session.execute(text("SELECT 1"))
-        return jsonify({"message": "Connection successful", "result": result.fetchone()}), 200
+        result = db.session.execute("SELECT 1")
+        row = result.fetchone()  # Fetch the first row
+        return jsonify({"message": "Connection successful", "result": row[0]}), 200  # Access the first column
     except pymysql.MySQLError as e:
         # Handle errors related to MySQL connection
         return jsonify({"error": "Database connection failed", "details": str(e)}), 500
