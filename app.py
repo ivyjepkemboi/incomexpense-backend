@@ -29,7 +29,7 @@ db = SQLAlchemy(app)
 def test_connection():
     try:
         # Attempt to execute a simple query to check the connection
-        result = db.session.execute("SELECT 1")
+        result = db.session.execute(text("SELECT 1"))
         return jsonify({"message": "Connection successful", "result": result.fetchone()}), 200
     except pymysql.MySQLError as e:
         # Handle errors related to MySQL connection
