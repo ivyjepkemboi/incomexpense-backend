@@ -20,6 +20,10 @@ CORS(app)  # Enable CORS for all routes
 app.register_blueprint(auth_routes, url_prefix='/auth')
 app.register_blueprint(expense_routes, url_prefix='/api')
 
+@app.route("/")
+def home():
+    return "Hello, Cloud Run!"
+
 
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host="0.0.0.0")
