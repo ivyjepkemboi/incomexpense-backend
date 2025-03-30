@@ -31,6 +31,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize the database object
 db = SQLAlchemy(app)
 
+migrate = Migrate(app, db)
+
+from models import *
 
 jwt = JWTManager(app)
 
