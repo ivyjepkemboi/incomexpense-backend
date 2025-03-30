@@ -11,19 +11,14 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
-
-@app.route("/")
-def home():
-    return "Hello, Cloud Run!"
-
 # db.init_app(app)
-# jwt = JWTManager(app)
+jwt = JWTManager(app)
 # migrate = Migrate(app, db)
 
-# CORS(app)  # Enable CORS for all routes
+CORS(app)  # Enable CORS for all routes
 
-# app.register_blueprint(auth_routes, url_prefix='/auth')
-# app.register_blueprint(expense_routes, url_prefix='/api')
+app.register_blueprint(auth_routes, url_prefix='/auth')
+app.register_blueprint(expense_routes, url_prefix='/api')
 
 
 if __name__ == "__main__":
