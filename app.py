@@ -1,54 +1,46 @@
-from flask import Flask
-from flask_jwt_extended import JWTManager
-from flask_migrate import Migrate
-from flask_cors import CORS  # Import CORS
-from config import Config
-from db import db
-from routes.auth_routes import auth_routes
-from routes.expense_routes import expense_routes
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-
+import pymysql
+import os
 
 app = Flask(__name__)
 
-
-# Google Cloud SQL Configuration (Update accordingly)
+# Database Configuration (Replace these with your actual values)
 PASSWORD = "achawee.123!*"
-PUBLIC_IP_ADDRESS = "4.57.129.2"  # If using public IP (optional, or replace with Cloud SQL socket)
 DBNAME = "expenses"
 PROJECT_ID = "landser"
 INSTANCE_NAME = "expense"
 
-# Configuration
-app.config["SECRET_KEY"] = "yoursecretkey"
-
-# Correct SQLAlchemy connection string
+# Set up the connection URL for Cloud SQL (using PyMySQL as the driver)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"mysql+mysqldb://exp_admin:{PASSWORD}@/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+    f"mysql+pymysql://exp_admin:{PASSWORD}@/"
+    f"{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:us-central1:{INSTANCE_NAME}"
 )
 
-# Optional: Disable track modifications if not needed
+# Other Flask configurations
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize SQLAlchemy
+# Initialize the database object
 db = SQLAlchemy(app)
 
+@app.route('/')
+def test_connection():
+    try:
+        # Attempt to execute a simple query to check the connection
+        result = db.session.execute("SELECT 1")
+        return jsonify({"message": "Connection successful", "result": result.fetchone()}), 200
+    except pymysql.MySQLError as e:
+        # Handle errors related to MySQL connection
+        return jsonify({"error": "Database connection failed", "details": str(e)}), 500
+    except Exception as e:
+        # Handle any other unexpected errors
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
-# app.config.from_object(Config)
-
-# db.init_app(app)
-jwt = JWTManager(app)
-# migrate = Migrate(app, db)
-
-CORS(app)  # Enable CORS for all routes
-
-app.register_blueprint(auth_routes, url_prefix='/auth')
-app.register_blueprint(expense_routes, url_prefix='/api')
-
-@app.route("/")
-def home():
-    return "Hello, Cloud Run!"
-
-
-if __name__ == "__main__":
-    app.run(debug=True,port=8080,host="0.0.0.0")
+if __name__ == '__main__':
+    try:
+        # Check connection at app startup
+        db.session.execute("SELECT 1")
+        print("Database connection successful.")
+    except Exception as e:
+        print(f"Error connecting to the database: {e}")
+    app.run(debug=True)
