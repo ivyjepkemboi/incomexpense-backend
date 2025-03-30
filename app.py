@@ -8,16 +8,22 @@ from routes.auth_routes import auth_routes
 from routes.expense_routes import expense_routes
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
 
-db.init_app(app)
-jwt = JWTManager(app)
-migrate = Migrate(app, db)
 
-CORS(app)  # Enable CORS for all routes
+@app.route("/")
+def home():
+    return "Hello, Cloud Run!"
 
-app.register_blueprint(auth_routes, url_prefix='/auth')
-app.register_blueprint(expense_routes, url_prefix='/api')
+# db.init_app(app)
+# jwt = JWTManager(app)
+# migrate = Migrate(app, db)
+
+# CORS(app)  # Enable CORS for all routes
+
+# app.register_blueprint(auth_routes, url_prefix='/auth')
+# app.register_blueprint(expense_routes, url_prefix='/api')
 
 
 if __name__ == "__main__":
