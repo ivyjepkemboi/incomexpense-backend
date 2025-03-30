@@ -236,3 +236,15 @@ def test():
 
 
     return jsonify({"message": "Transaction deleted successfully"}), 200
+
+@expense_routes.route("/test-db", methods=["GET"])
+def test_db_connection():
+    try:
+        # Run a simple query
+        result = db.session.execute("SELECT 1").fetchone()
+        if result:
+            return jsonify({"message": "Database connection successful!"}), 200
+        else:
+            return jsonify({"message": "Database connection failed!"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
