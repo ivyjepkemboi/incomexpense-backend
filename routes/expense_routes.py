@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy import text
 from db import db
 from models import Transaction
 from datetime import datetime
@@ -241,7 +242,10 @@ def test():
 def test_db_connection():
     try:
         # Run a simple query
-        result = db.session.execute("SELECT 1").fetchone()
+        result = db.session.execute(text("SELECT * FROM alembic_version"))
+
+       
+
         if result:
             return jsonify({"message": "Database connection successful!"}), 200
         else:
