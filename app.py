@@ -25,8 +25,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize the database object
 db = SQLAlchemy(app)
 
-# Initialize the database object
-db = SQLAlchemy(app)
+
 
 # Define a simple User model for the table
 class User(db.Model):
