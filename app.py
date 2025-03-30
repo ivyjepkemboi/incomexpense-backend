@@ -12,19 +12,27 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 
-# Google Cloud SQL (change this accordingly)
-PASSWORD ="achawee.123!*"
-PUBLIC_IP_ADDRESS ="34.57.129.23"
-DBNAME ="expenses"
-PROJECT_ID ="landser"
-INSTANCE_NAME ="expense"
- 
-# configuration
+# Google Cloud SQL Configuration (Update accordingly)
+PASSWORD = "achawee.123!*"
+PUBLIC_IP_ADDRESS = "4.57.129.2"  # If using public IP (optional, or replace with Cloud SQL socket)
+DBNAME = "expenses"
+PROJECT_ID = "landser"
+INSTANCE_NAME = "expense"
+
+# Configuration
 app.config["SECRET_KEY"] = "yoursecretkey"
-app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql + mysqldb://exp_admin:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
- 
+
+# Correct SQLAlchemy connection string
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    f"mysql+mysqldb://exp_admin:{PASSWORD}@/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+)
+
+# Optional: Disable track modifications if not needed
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Initialize SQLAlchemy
 db = SQLAlchemy(app)
+
 
 # app.config.from_object(Config)
 
