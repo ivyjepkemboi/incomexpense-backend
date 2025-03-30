@@ -60,6 +60,7 @@ def test_connection():
         # Handle any other unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
     
+@app.route('/seed')   
 def migrate_on_start():
     """Automatically run migrations on app load"""
     try:
