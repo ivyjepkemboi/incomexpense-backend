@@ -20,11 +20,11 @@ PROJECT_ID ="landser"
 INSTANCE_NAME ="expense"
  
 # configuration
-app.config["SECRET_KEY"] = "yoursecretkey"
-app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql + mysqldb://exp_admin:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
+# app.config["SECRET_KEY"] = "yoursecretkey"
+# app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql + mysqldb://exp_admin:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
  
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
 # app.config.from_object(Config)
 
