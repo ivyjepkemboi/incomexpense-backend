@@ -1,15 +1,24 @@
-FROM python:3.10-slim
+# Use official Python 3.8 image
+FROM python:3.8-slim
 
-ENV PYTHONUNBUFFERED True
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-ENV APP_HOME /app
+# Set working directory
+WORKDIR /app
 
-ENV PORT 5000
+# Copy requirements first and install dependencies
+COPY requirements.txt .
 
-WORKDIR $APP_HOME
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-COPY . ./
+# Copy the rest of the app
+COPY . .
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Expose port for Flask
+EXPOSE 8080
 
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
+# Run the app
+CMD ["python", "app.py"]
