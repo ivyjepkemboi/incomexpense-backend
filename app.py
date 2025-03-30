@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import pymysql
 import os
 
+from sqlalchemy import text
+
 app = Flask(__name__)
 
 # Database Configuration (Replace these with your actual values)
@@ -39,7 +41,8 @@ def test_connection():
 if __name__ == '__main__':
     try:
         # Check connection at app startup
-        db.session.execute("SELECT 1")
+        db.session.execute(text("SELECT * 1"))
+       
         print("Database connection successful.")
     except Exception as e:
         print(f"Error connecting to the database: {e}")
