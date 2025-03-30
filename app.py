@@ -17,7 +17,7 @@ PASSWORD ="achawee.123!*"
 PUBLIC_IP_ADDRESS ="34.57.129.23"
 DBNAME ="expenses"
 PROJECT_ID ="landser"
-INSTANCE_NAME ="expenses"
+INSTANCE_NAME ="expense"
  
 # configuration
 app.config["SECRET_KEY"] = "yoursecretkey"
