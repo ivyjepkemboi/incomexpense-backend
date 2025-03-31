@@ -27,8 +27,8 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 
-@auth_routes.route('/login', methods=['POST'])
-def login():
+@auth_routes.route('/login2_old', methods=['POST'])
+def login_old():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
     
@@ -36,4 +36,20 @@ def login():
         access_token = create_access_token(identity=user.id)
         return jsonify(access_token=access_token), 200
     
+    return jsonify({"error": "Invalid credentials"}), 401
+
+
+@auth_routes.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({"error": "Email and password are required"}), 400
+
+    user = User.query.filter_by(email=data['email']).first()
+
+    if user and bcrypt.check_password_hash(user.password_hash, data['password']):
+        access_token = create_access_token(identity=user.id)
+        return jsonify(access_token=access_token), 200
+
     return jsonify({"error": "Invalid credentials"}), 401
