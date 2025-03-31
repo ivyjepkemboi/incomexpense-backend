@@ -11,6 +11,7 @@ from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 import os
+from models import User, Transaction  # Import the models
 
 app = Flask(__name__)
 
@@ -32,9 +33,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize the database object
 db = SQLAlchemy(app)
 
-# migrate = Migrate(app, db)
+migrate = Migrate(app, db)
 
-# from models import *
 
 jwt = JWTManager(app)
 
@@ -60,18 +60,19 @@ def test_connection():
         # Handle any other unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
         
-@app.route('/seed')   
-def migrate_on_start():
-    """Automatically run migrations on app load"""
+# Define the /create_tables route to create all tables
+@app.route('/c')
+def create_tables():
     try:
-        print("Running migrations...")
-        # Automatically apply migrations
-        click.echo("Running migrations...")
-        from flask_migrate import upgrade
-        upgrade()
-        print("Migrations applied successfully!")
+        # Create all tables based on the models defined
+        db.create_all()
+
+        # Optionally, you can add sample data here if you want to populate the tables with data
+
+        return jsonify({"message": "Tables created successfully!"}), 200
     except Exception as e:
-        print(f"Error applying migrations: {e}")
+        return jsonify({"error": "An error occurred while creating tables.", "details": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host="0.0.0.0")
