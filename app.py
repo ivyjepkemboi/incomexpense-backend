@@ -11,6 +11,7 @@ from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 import os
+from flask_bcrypt import Bcrypt
 from models import User, Transaction  # Import the models
 
 app = Flask(__name__)
@@ -43,6 +44,7 @@ migrate = Migrate(app, db)
 
 jwt = JWTManager(app)
 
+bcrypt = Bcrypt()
 
 CORS(app)  # Enable CORS for all routes
 

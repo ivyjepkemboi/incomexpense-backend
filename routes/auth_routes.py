@@ -5,7 +5,8 @@ from db import db
 from models import User
 
 auth_routes = Blueprint('auth_routes', __name__)
-bcrypt = Bcrypt()
+# bcrypt = Bcrypt()
+from app import bcrypt
 
 @auth_routes.route('/register', methods=['POST'])
 def register():
@@ -27,7 +28,7 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 
-@auth_routes.route('/loginn', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
