@@ -5,6 +5,7 @@ import pymysql
 import os
 from flask.cli import with_appcontext
 import click
+from sqlalchemy import text
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -35,7 +36,7 @@ from models import *
 def test_connection():
     try:
         # Attempt to execute a simple query to check the connection
-        result = db.session.execute("SELECT 1")
+        result = db.session.execute(text("SELECT 1"))
         row = result.fetchone()  # Fetch the first row
         return jsonify({"message": "Connection successful", "result": row[0]}), 200
     except pymysql.MySQLError as e:
