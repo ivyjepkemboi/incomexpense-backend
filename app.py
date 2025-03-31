@@ -20,10 +20,11 @@ PASSWORD = "achawee.123!*"
 DBNAME = "expenses"
 PROJECT_ID = "landser"
 INSTANCE_NAME = "expense"
+USER = "exp_admin"
 
 # Set up the connection URL for Cloud SQL (using PyMySQL as the driver)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"mysql+pymysql://exp_admin:{PASSWORD}@/"
+    f"mysql+pymysql://{USER}:{PASSWORD}@/"
     f"{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:us-central1:{INSTANCE_NAME}"
 )
 
