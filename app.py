@@ -31,7 +31,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 # Other Flask configurations
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-app.config.from_object(Config)
+
 
 
 # Initialize the database instance with Flask app
