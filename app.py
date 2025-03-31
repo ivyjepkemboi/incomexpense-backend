@@ -1,18 +1,12 @@
-import click
 from flask import Flask, jsonify
-from flask.cli import with_appcontext
-from flask_jwt_extended import JWTManager
-from flask_migrate import Migrate
-from flask_cors import CORS  # Import CORS
-from config import Config
-from db import db
-from routes.auth_routes import auth_routes
-from routes.expense_routes import expense_routes
-from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import pymysql
 import os
+from flask.cli import with_appcontext
+import click
 
+# Initialize Flask app
 app = Flask(__name__)
 
 # Database Configuration (Replace these with your actual values)
@@ -30,37 +24,25 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 # Other Flask configurations
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize the database object
+# Initialize the database object and Migrate object
 db = SQLAlchemy(app)
-
 migrate = Migrate(app, db)
 
+# Import models (ensure this is done after db is initialized)
 from models import *
 
-jwt = JWTManager(app)
-
-
-CORS(app)  # Enable CORS for all routes
-
-app.register_blueprint(auth_routes, url_prefix='/auth')
-app.register_blueprint(expense_routes, url_prefix='/api')
-
-
 @app.route('/')
-
 def test_connection():
     try:
         # Attempt to execute a simple query to check the connection
-        result = db.session.execute(text("SELECT 1"))
+        result = db.session.execute("SELECT 1")
         row = result.fetchone()  # Fetch the first row
-        return jsonify({"message": "Connection successful", "result": row[0]}), 200  # Access the first column
+        return jsonify({"message": "Connection successful", "result": row[0]}), 200
     except pymysql.MySQLError as e:
-        # Handle errors related to MySQL connection
         return jsonify({"error": "Database connection failed", "details": str(e)}), 500
     except Exception as e:
-        # Handle any other unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
-    
+
 # Add a custom command to run migrations automatically on startup
 @app.cli.command('migrate_on_start')
 @with_appcontext
@@ -76,5 +58,5 @@ def migrate_on_start():
     except Exception as e:
         print(f"Error applying migrations: {e}")
 
-if __name__ == "__main__":
-    app.run(debug=True,port=8080,host="0.0.0.0")
+if __name__ == '__main__':
+    app.run(debug=True)
