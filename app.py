@@ -30,9 +30,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 # Other Flask configurations
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize the database object
-db = SQLAlchemy(app)
+# Initialize the database instance with Flask app
+db.init_app(app)
 
+# Initialize Flask-Migrate with app and db
 migrate = Migrate(app, db)
 
 
