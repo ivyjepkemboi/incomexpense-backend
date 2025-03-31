@@ -32,3 +32,5 @@ class Config:
         "mysql+mysqlconnector://exp_admin:encrypt.8336!*@34.57.129.23/expenses"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    SECRET_KEY = os.getenv("SECRET_KEY", "your_secret_key*****!!")
