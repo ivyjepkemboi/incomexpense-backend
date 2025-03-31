@@ -1,5 +1,6 @@
 import click
 from flask import Flask, jsonify
+from flask.cli import with_appcontext
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_cors import CORS  # Import CORS
@@ -60,7 +61,9 @@ def test_connection():
         # Handle any other unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
     
-@app.route('/seed')   
+# Add a custom command to run migrations automatically on startup
+@app.cli.command('migrate_on_start')
+@with_appcontext
 def migrate_on_start():
     """Automatically run migrations on app load"""
     try:
